@@ -15,9 +15,6 @@ public class DcCase {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "CASE_ID")
-	private Long caseId;
-	
 	@Column(name = "CASE_NUM")
 	private Long caseNum;
 	

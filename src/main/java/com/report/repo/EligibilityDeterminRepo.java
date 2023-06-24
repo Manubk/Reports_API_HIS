@@ -12,6 +12,6 @@ import com.report.entity.EligibilityDeterminEntity;
 @Repository
 public interface EligibilityDeterminRepo  extends JpaRepository<EligibilityDeterminEntity, Long>{
 
-	@Query("SELECT DISTINCE(planStatus) from ELigibilityDeterminiEntity")
-	public List<String> findUniquePlanStatus();
+//	@Query("SELECT DISTINCE(planStatus) from ELigibilityDeterminiEntity")
+//	public List<String> findUniquePlanStatus();
 }

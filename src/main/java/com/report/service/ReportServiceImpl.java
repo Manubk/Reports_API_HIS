@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.util.HSSFColor.HSSFColorPredefined;
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.hibernate.annotations.ColumnDefault;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
+import com.lowagie.text.Font;
 import com.report.dto.SearchRequestDto;
 import com.report.dto.SearchResponseDto;
 import com.report.entity.ApplicationRegistration;
@@ -52,7 +56,7 @@ public class ReportServiceImpl implements IReportService {
 	public List<String> findPlanStatus() {
 		log.info("findPlanStatus");
 
-		return eligibilityDeterminRepo.findUniquePlanStatus();
+		return planRepo.findUniquePlanNames();
 
 	}
 
@@ -121,11 +125,21 @@ public class ReportServiceImpl implements IReportService {
 		List<EligibilityDeterminEntity> eligibilityDetails = eligibilityDeterminRepo.findAll();
 
 		List<SearchResponseDto> responses = new ArrayList<>();
+		
+		
 
 		HSSFWorkbook workBook = new HSSFWorkbook();
 
 		HSSFSheet citizenSheet = workBook.createSheet("CitizenDetails");
-
+		
+		CellStyle headerCell = workBook.createCellStyle();
+		 HSSFFont headerFont = workBook.createFont();
+		 headerFont.setFontName(HSSFFont.FONT_ARIAL);
+		 headerFont.setBold(true);
+		 headerFont.setColor(HSSFColorPredefined.DARK_TEAL.getIndex());
+		 headerCell.setFont(headerFont);
+		 
+		 
 		HSSFRow headerRow = citizenSheet.createRow(0);
 
 		headerRow.createCell(0).setCellValue("SL No");
@@ -134,10 +148,10 @@ public class ReportServiceImpl implements IReportService {
 		headerRow.createCell(3).setCellValue("Gender");
 		headerRow.createCell(4).setCellValue("Phone No");
 		headerRow.createCell(5).setCellValue("SSN");
+		headerRow.setRowStyle(headerCell);
+		int slNo = 1;
 
-		Integer slNo = 1;
-
-		eligibilityDetails.forEach(details -> {
+		for(EligibilityDeterminEntity details: eligibilityDetails) {
 
 			Optional<DcCase> OCase = caseRepo.findById(details.getCaseNum());
 
@@ -160,9 +174,15 @@ public class ReportServiceImpl implements IReportService {
 				}
 
 			}
-		});
+		}
 
 		return workBook;
+	}
+
+	@Override
+	public HSSFWorkbook generateCitizenReport(SearchRequestDto requestDto) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

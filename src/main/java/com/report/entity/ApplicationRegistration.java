@@ -43,6 +43,6 @@ public class ApplicationRegistration {
 	@Column(name = "DOB")
 	private LocalDate dob;
 	
-	@Column(name = "ACTIVE_SW")
-	private boolean activeSw;
+	@Column(name = "ACTIVE_SW",columnDefinition = "varchar(1) default 'A'")
+	private String activeSw;
 }
