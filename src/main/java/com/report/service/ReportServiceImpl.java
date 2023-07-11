@@ -1,7 +1,10 @@
 package com.report.service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.apache.poi.hssf.usermodel.HSSFFont;
@@ -20,9 +23,11 @@ import org.springframework.stereotype.Service;
 import com.lowagie.text.Font;
 import com.report.dto.SearchRequestDto;
 import com.report.dto.SearchResponseDto;
+import com.report.dto.UniqueSearchValues;
 import com.report.entity.ApplicationRegistration;
 import com.report.entity.DcCase;
 import com.report.entity.EligibilityDeterminEntity;
+import com.report.entity.Plan;
 import com.report.repo.ApplicationRegistrationRepo;
 import com.report.repo.DcCaseRepo;
 import com.report.repo.EligibilityDeterminRepo;
@@ -46,19 +51,7 @@ public class ReportServiceImpl implements IReportService {
 	@Autowired
 	private ApplicationRegistrationRepo applicationRegistrationRepo;
 
-	@Override
-	public List<String> findPlanNames() {
-		log.info("findPlanNames");
-		return planRepo.findUniquePlanNames();
-	}
 
-	@Override
-	public List<String> findPlanStatus() {
-		log.info("findPlanStatus");
-
-		return planRepo.findUniquePlanNames();
-
-	}
 
 	@Override
 	public List<SearchResponseDto> findBySearch(SearchRequestDto requestDto) {
@@ -72,16 +65,16 @@ public class ReportServiceImpl implements IReportService {
 			queryBuilder.setPlanName(requestDto.getPlanName());
 		}
 
-		if (requestDto.getPlanStatus() != null && !requestDto.getPlanStatus().equals("")) {
-			queryBuilder.setPlanStatus(requestDto.getPlanStatus());
+		if (requestDto.getStatus() != null && !requestDto.getStatus().equals("")) {
+			queryBuilder.setPlanStatus(requestDto.getStatus());
 		}
 
-		if (requestDto.getPlanStartDate() != null) {
-			queryBuilder.setPlanStartDate(requestDto.getPlanStartDate());
+		if (requestDto.getStartDate() != null) {
+			queryBuilder.setPlanStartDate(requestDto.getStartDate());
 		}
 
-		if (requestDto.getPlanEndDate() != null) {
-			queryBuilder.setPlanEndDate(requestDto.getPlanEndDate());
+		if (requestDto.getEndDate() != null) {
+			queryBuilder.setPlanEndDate(requestDto.getEndDate());
 		}
 
 		// Dynamic query BUilding based on search or filter
@@ -183,6 +176,33 @@ public class ReportServiceImpl implements IReportService {
 	public HSSFWorkbook generateCitizenReport(SearchRequestDto requestDto) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public UniqueSearchValues getUniqueSearchValues() {
+		log.info("getUniqueSearchValues");
+		
+		// should get unique plans
+		List<String> uniquePlanNames = planRepo.findUniquePlanNames();
+		
+		
+		//should get unique status
+		List<String> uniqueStatus = eligibilityDeterminRepo.findUniquePlanStatus();
+		
+		
+		//should get unique plan start dates
+		List<LocalDate> uniqueStartDate = eligibilityDeterminRepo.findUniqueStartDate();
+		
+		//should get unique plan end dates
+		List<LocalDate> uniqueEndDate = eligibilityDeterminRepo.findUniqueEndDate();
+		
+		UniqueSearchValues uniqueValues = new UniqueSearchValues();
+		uniqueValues.setUniquePlans(uniquePlanNames);
+		uniqueValues.setUniqueStatus(uniqueStatus);
+		uniqueValues.setUniqueStartDates(uniqueStartDate);
+		uniqueValues.setUniqueEndDates(uniqueEndDate);
+		
+		return uniqueValues;
 	}
 
 }

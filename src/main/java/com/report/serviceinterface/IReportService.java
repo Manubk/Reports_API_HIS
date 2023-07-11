@@ -7,15 +7,14 @@ import org.springframework.stereotype.Service;
 
 import com.report.dto.SearchRequestDto;
 import com.report.dto.SearchResponseDto;
+import com.report.dto.UniqueSearchValues;
 
 @Service
 public interface IReportService {
-	
-	public List<String> findPlanNames();
-	
-	public List<String> findPlanStatus();
-	
+		
 	public List<SearchResponseDto> findBySearch(SearchRequestDto requestDto);
+	
+	public UniqueSearchValues getUniqueSearchValues();
 	
 	public HSSFWorkbook generateCitizenReport();
 	

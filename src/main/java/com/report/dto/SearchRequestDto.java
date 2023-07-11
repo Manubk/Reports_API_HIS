@@ -9,11 +9,11 @@ public class SearchRequestDto {
 	
 	private String planName;
 	
-	private String planStatus;
+	private String status;
 	
-	private LocalDate planStartDate;
+	private LocalDate startDate;
 	
-	private LocalDate planEndDate;
+	private LocalDate endDate;
 	
 	private String ssn;
 	
