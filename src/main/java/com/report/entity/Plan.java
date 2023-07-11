@@ -25,15 +25,21 @@ public class Plan {
 	@Column(name = "PLAN_NAME")
 	public String planName;
 	
+	@Column(name = "BENEFIT_AMT")
+	private double benefitAmt;
+	
 	@Column(name = "PLAN_START_DATE")
 	public LocalDate planStartDate;
 	
 	@Column(name = "PLAN_END_DATE")
 	public LocalDate planEndDate;
 	
-	@Column(name = "CATEGORY_ID")
+	@Column(name = "PLAN_CATEGORY_ID")
 	public Integer categoryId;
 	
 	@Column(name = "ACTIVE_SW")
 	public String activeSw;
+	
+	@Column(name = "INCOME_LIMIT")
+	public Double incomeLimit;
 }
